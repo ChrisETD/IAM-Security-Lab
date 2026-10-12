@@ -6,4 +6,4 @@ The assessment included password policies, Conditional Access, privileged access
 
 The report documents identified findings, remediation completed during the lab and recommendations for further improvement.
 
-**[View IAM Security Audit Report (PDF)]([audit-report/IAM%20Security%20Audit%20Report.pdf](https://github.com/ChrisETD/IAM-Security-Lab/blob/main/audit-report/IAM%20Security%20Audit%20Report..pdf))**
+**[View IAM Security Audit Report (PDF)]([main/audit-report/IAM%20Security%20Audit%20Report..pdf))**
