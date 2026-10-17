@@ -9,7 +9,7 @@ param(
 $Username = ($FirstName[0] + $LastName).ToLower()
 $UPN = "$Username@iamlab.local"
 $OU = "OU=$Department,DC=iamlab,DC=local"
-$Password = ConvertTo-SecureString "Welcome1!" -AsPlainText -Force
+$Password = Read-Host "Enter Temporary Password" -AsSecureString
 
 # Create User
 New-ADUser -Name "$FirstName $LastName" `
