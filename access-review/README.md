@@ -42,6 +42,9 @@ The before-and-after screenshots in this folder demonstrate the account's group 
 
 This exercise focused on a selected lab account and its Active Directory group memberships. It does not represent a complete organisation-wide access certification or review of all effective permissions.
 
+
+
+
 ## Privileged Access Review – Admin-Access Group
 
 ### Objective
