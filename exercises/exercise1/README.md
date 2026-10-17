@@ -62,7 +62,7 @@ The objective was to provision a new employee account, update access following a
 
 **Evidence:**
 
-![Leaver verification](04-leaver-verification.png)
+![Leaver verification](05-leaver-verification.png)
 
 ## Key IAM Principles Demonstrated
 
