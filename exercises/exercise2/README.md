@@ -3,7 +3,7 @@
 ## Overview
 
 This exercise demonstrates the configuration, testing and troubleshooting of Microsoft Entra ID Conditional Access policies in an IAM lab environment.
-
+ 
 The objective was to validate MFA requirements for a test user and investigate policy evaluation results using Microsoft Entra sign-in logs.
 
 ## Environment
