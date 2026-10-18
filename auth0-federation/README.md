@@ -1,11 +1,10 @@
-
 # Auth0 Federation and Application Access Control
 
 ## Overview
 
 As part of my IAM Security Lab, I configured federated authentication between Microsoft Entra ID and Auth0 using OpenID Connect (OIDC).
 
-The objective was to understand how Microsoft Entra ID can act as an identity provider for an external application, while testing application access assignments, multifactor authentication (MFA) and authentication logging.
+The objective was to understand how Microsoft Entra ID can act as an identity provider for an external application, while testing application access assignments, Auth0's own multifactor authentication (MFA) enrolment and authentication logging.
 
 The exercise involved configuring an application registration in Microsoft Entra ID, establishing an Auth0 enterprise connection and testing authentication using lab accounts.
 
@@ -98,12 +97,12 @@ The logs included:
 - Successful login.
 - Successful signup.
 - Successful authorization-code exchange.
-- MFA/TOTP enrolment started.
-- MFA/TOTP enrolment completed.
+- Auth0 MFA (Guardian, TOTP) enrolment started.
+- Auth0 MFA (Guardian, TOTP) enrolment completed.
 
-The recorded events provided evidence of authentication activity and MFA enrolment within the lab.
+The recorded events provided evidence of authentication activity and Auth0 MFA enrolment within the lab.
 
-These results supported the successful federation testing, although they did not establish comprehensive MFA enforcement across all users or authentication scenarios.
+The MFA events shown are from Auth0's own multifactor service. These logs do not show whether Microsoft Entra ID also prompted for MFA during the sign-in, and they do not establish MFA enforcement across all users or authentication scenarios.
 
 ### Evidence
 
@@ -118,7 +117,7 @@ These results supported the successful federation testing, although they did not
 | Attempt access without assignment | Unassigned account is blocked | Confirmed – AADSTS50105 |
 | Restore application access and retest | Test account authenticates successfully | Confirmed |
 | Review Auth0 authentication logs | Authentication events are recorded | Confirmed |
-| Review MFA enrolment events | MFA registration activity is recorded | Confirmed |
+| Review Auth0 MFA enrolment events | Auth0 MFA registration activity is recorded | Confirmed (Auth0 Guardian, TOTP) |
 
 ## 8. Key Learning Outcomes
 
@@ -132,7 +131,7 @@ This exercise provided practical experience with:
 - Investigating authentication failures.
 - Validating successful authentication after access changes.
 - Reviewing Auth0 authentication logs.
-- Understanding MFA enrolment within an authentication process.
+- Understanding how an application's own MFA (Auth0) sits alongside the identity provider's authentication.
 
 A key takeaway from this exercise was the distinction between authentication and authorisation.
 
