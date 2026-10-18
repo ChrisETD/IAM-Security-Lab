@@ -23,7 +23,7 @@ The application registration was also reviewed during the Non-Human Identity Sec
 
 ### Evidence
 
-![Microsoft Entra ID Application Registration](screenshots/01-entra-app-registration.png)
+![Microsoft Entra ID Application Registration](01-entra-app-registration.png)
 
 ## 2. Auth0 Federation Configuration
 
