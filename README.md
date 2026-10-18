@@ -1,6 +1,6 @@
 # Identity & Access Management (IAM) Security Lab
 
-A self-directed lab connecting on-premises Active Directory to Microsoft Entra ID, with PowerShell lifecycle automation, Conditional Access testing, privileged-change detection and a written security audit. Every finding below links to screenshot evidence, and anything not fully tested is marked as such.
+A self-directed lab connecting on-premises Active Directory to Microsoft Entra ID, with PowerShell lifecycle automation, Conditional Access testing, Auth0 federation, privileged-change detection and a written security audit. Every finding below links to screenshot evidence, and anything not fully tested is marked as such.
 
 **Scope:** an isolated lab built for learning and portfolio use, not a production deployment.
 
@@ -15,19 +15,21 @@ A self-directed lab connecting on-premises Active Directory to Microsoft Entra I
 | Hybrid identity sync | Deployed Entra Connect Sync, PHS, OU filtering; synced a test account | Verified for one test account | [hybrid-identity-sync](hybrid-identity-sync/) |
 | Joiner-mover-leaver | Full lifecycle for a test employee (scripted joiner and leaver, manual mover) | Verified | [Exercise 1](exercises/exercise1/) |
 | Conditional Access | Four policies (two On, two Report-only); CA002 tested via sign-in logs | Partial | [Exercise 2](exercises/exercise2/), [conditional-access](conditional-access/) |
+| Auth0 federation | Entra ID as identity provider for Auth0 via OIDC; "Assignment required" blocked an unassigned user (`AADSTS50105`), then succeeded once access was restored | Verified for test accounts | [auth0-federation](auth0-federation/) |
 | Privileged change detection | Simulated an `Admin-Access` membership change, investigated Event ID 4728, remediated | Verified | [Exercise 3](exercises/exercise3/) |
 | Access review | Removed unnecessary `IT-Staff` and `HR-Staff` access from a test user; flagged a privileged member | Verified; privileged finding open | [access-review](access-review/) |
 | Non-human identities | Reviewed two service accounts and one app registration; assigned the missing app owner | Partial | [non-human-identity](non-human-identity/) |
 | Security audit | Strengthened password policy (7 to 14 characters, lockout at 10); prioritised recommendations | Remediated and open items listed | [Audit report (PDF)](audit-report/IAM%20Lab%20Security%20Audit%20Report.pdf) |
-| Auth0 federation | Entra ID as identity provider for an Auth0 app via OIDC; MFA registration and sign-in tested | Tested with one account | |
 
 Exercises 1 to 3 were hands-on. [Exercise 4](exercises/exercise4/) (service account review) and [Exercise 5](exercises/exercise5/) (platform comparison) are desk reviews.
 
-## Three things the lab taught me
+## Four things the lab taught me
 
 **Local success is not cloud success.** Entra Connect imported and synchronised users without errors, but nothing reached Entra ID. The server was in staging mode, which processes changes without exporting them. I disabled it and confirmed the account in the Entra portal with its on-premises attributes.
 
 **An MFA prompt does not prove your policy ran.** My first CA002 test completed MFA, but the sign-in log showed the policy hadn't applied because the test user was directly excluded. After removing the exclusion, the log confirmed CA002 applied. A Microsoft-managed MFA policy also returned Success, so I can't claim CA002 alone caused the prompt.
+
+**Authentication is not authorisation.** With "Assignment required" enabled on the Entra enterprise application, a user with valid credentials was still refused with `AADSTS50105` until they were assigned. After restoring access, the Auth0 connection test succeeded.
 
 **Group changes leave an audit trail.** Adding a test user to `Admin-Access` generated Event ID 4728, recording who made the change, who was added and when. Membership of that group does not on its own prove Domain Admin rights, and I did not test its effective permissions.
 
