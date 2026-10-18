@@ -1,5 +1,5 @@
 # Exercise 5 – Cross-Platform IAM Comparison
-
+ 
 ## Overview
 
 This exercise compares Active Directory, Microsoft Entra ID, Auth0 and Okta, focusing on how each platform handles identity management, authentication and access control.
