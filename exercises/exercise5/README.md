@@ -39,7 +39,7 @@ The CA002 MFA policy was tested using a dedicated account, with sign-in logs use
 
 Auth0 was used to configure an application integration with Microsoft Entra ID using OpenID Connect (OIDC).
 
-The authentication flow was tested successfully, including MFA during the sign-in process.
+The authentication flow was tested successfully, including Auth0 MFA (TOTP) enrolment.
 
 This provided a basic understanding of how an application can use an external identity provider for authentication.
 
