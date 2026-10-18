@@ -1,5 +1,5 @@
 # Exercise 1 – Full Employee Lifecycle Simulation
- 
+
 ## Overview
 
 This exercise demonstrates the management of an employee's identity and access throughout the Joiner, Mover and Leaver (JML) lifecycle using Windows Server Active Directory and PowerShell.
