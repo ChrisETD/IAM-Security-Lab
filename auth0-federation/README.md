@@ -43,7 +43,7 @@ The integration was configured to support user authentication through Microsoft 
 
 ### Evidence
 
-![Auth0 Federation Connection](screenshots/02-auth0-connection.png)
+![Auth0 Federation Connection](02-auth0-connection.png)
 
 ## 3. Application Access Control
 
@@ -57,7 +57,7 @@ The configuration provided an opportunity to test how application assignments af
 
 ### Evidence
 
-![Enterprise Application Assignment Requirement](screenshots/05-assignment-required.png)
+![Enterprise Application Assignment Requirement](05-assignment-required.png)
 
 ## 4. Access Restriction Testing
 
@@ -87,7 +87,7 @@ The result also demonstrated the importance of validating access after making ch
 
 ### Evidence
 
-![Successful Authentication After Access Restoration](screenshots/11-successful-login-after-access-restored.png)
+![Successful Authentication After Access Restoration](11-successful-login-after-access-restored.png)
 
 ## 6. Authentication Logs and MFA
 
@@ -107,7 +107,7 @@ These results supported the successful federation testing, although they did not
 
 ### Evidence
 
-![Auth0 Authentication Logs](screenshots/10-auth0-authentication-logs.png)
+![Auth0 Authentication Logs](10-auth0-authentication-logs.png)
 
 ## 7. Testing Summary
 
