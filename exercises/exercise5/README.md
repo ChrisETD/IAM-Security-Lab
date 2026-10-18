@@ -7,7 +7,7 @@ This exercise compares Active Directory, Microsoft Entra ID, Auth0 and Okta, foc
 The lab involved practical testing with Active Directory, Entra ID and Auth0. Okta was also explored, but the setup couldn't be completed due to registration requirements.
 
 The main objective was to understand the differences between on-premises identity management, cloud identity services and application authentication.
-
+ 
 ## 1. Platforms Compared
 
 | Platform | Main Purpose | Lab Experience |
