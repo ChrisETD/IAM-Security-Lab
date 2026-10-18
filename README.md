@@ -1,171 +1,224 @@
+
 # Identity & Access Management (IAM) Security Lab
 
 ## Project Overview
 
-This project documents a hands-on Identity and Access Management (IAM) lab focused on building practical experience with user administration, access management, authentication security and PowerShell automation.
+This project documents a hands-on Identity and Access Management (IAM) lab developed to gain practical experience with identity administration, access security, authentication, hybrid identity management and PowerShell automation.
 
-The lab was built using Windows Server Active Directory, Microsoft Entra ID and Auth0. It covers everyday IAM tasks such as creating users, managing security groups, onboarding and offboarding accounts, configuring Conditional Access policies and investigating access-related security events.
+The environment integrates Windows Server Active Directory with Microsoft Entra ID using Microsoft Entra Connect Sync. Auth0 was also configured to test federated authentication through OpenID Connect (OIDC).
 
-Five practical exercises were also completed to test different IAM scenarios, including employee lifecycle management, MFA policy testing, unexpected group membership changes and service account reviews.
+The lab covers user lifecycle management, security group administration, Conditional Access, multifactor authentication (MFA), access reviews, identity synchronisation and security auditing.
 
-The project is based around key IAM concepts such as least privilege, role-based access control (RBAC), joiner-mover-leaver (JML) processes, multifactor authentication (MFA) and identity governance.
+Five practical IAM exercises were completed to investigate common identity security scenarios, including employee onboarding and offboarding, Conditional Access troubleshooting, unexpected group membership changes and service account management.
+
+The project focuses on applying least privilege, role-based access control (RBAC), joiner-mover-leaver (JML) processes and identity governance principles within a controlled environment.
 
 ## Technologies Used
 
-- Windows Server Active Directory
+- Windows Server 2022
+- Active Directory Domain Services (AD DS)
 - Microsoft Entra ID
-- Auth0
-- PowerShell
+- Microsoft Entra Connect Sync
 - Microsoft Entra Conditional Access
+- Auth0
+- OpenID Connect (OIDC)
+- PowerShell
 - Windows Security Event Logs
 - Oracle VirtualBox
 
 ## IAM Lab Architecture
 
-The lab uses three main identity platforms:
+The lab consists of three identity platforms, with hybrid identity synchronisation configured between Active Directory and Microsoft Entra ID.
 
-**Active Directory:** Used for on-premises user administration, organisational units, security groups, service accounts and PowerShell automation.
+**Active Directory:** Provides on-premises identity management, including users, organisational units, security groups, service accounts and PowerShell-based administration.
 
-**Microsoft Entra ID:** Used for cloud user management, group assignments, MFA and Conditional Access policies.
+**Microsoft Entra ID:** Provides cloud identity management, Conditional Access, MFA, authentication monitoring and application registrations.
 
-**Auth0:** Used to test application authentication through Microsoft Entra ID using OpenID Connect (OIDC).
+**Microsoft Entra Connect Sync:** Synchronises selected on-premises identities to Microsoft Entra ID using Password Hash Synchronisation (PHS).
 
-Active Directory and Entra ID were configured separately. Directory synchronisation between the two environments was not implemented.
+**Auth0:** Provides an application authentication environment integrated with Microsoft Entra ID through OpenID Connect.
+
+The on-premises environment uses the `iamlab.local` domain, with Microsoft Entra Connect Sync deployed on a dedicated domain-joined Windows Server.
 
 [View IAM Architecture Diagram](diagrams/)
 
+## Hybrid Identity Synchronisation
+
+Hybrid identity synchronisation was implemented using Microsoft Entra Connect Sync to establish integration between on-premises Active Directory and Microsoft Entra ID.
+
+The configuration included:
+
+- Deploying a dedicated Windows Server 2022 synchronisation server.
+- Joining the server to the Active Directory domain.
+- Installing and configuring Microsoft Entra Connect Sync.
+- Configuring Password Hash Synchronisation.
+- Applying organisational unit filtering for Finance, HR, IT and Sales.
+- Configuring a test account with a Microsoft Entra-compatible User Principal Name (UPN).
+- Validating directory imports and synchronisation operations.
+- Troubleshooting staging mode and enabling synchronisation exports.
+
+A dedicated test account, `hybridtest`, was created in Active Directory and successfully synchronised to Microsoft Entra ID.
+
+Synchronisation Service Manager confirmed successful Full Import and Full Synchronisation operations, with 11 user objects identified in the metaverse.
+
+The synchronised account was subsequently verified in Microsoft Entra ID using its on-premises attributes, including the source domain, distinguished name, SAM account name and synchronisation status.
+
+This exercise provided practical experience with hybrid identity infrastructure, directory integration, identity attribute management and synchronisation troubleshooting.
+
+[View Hybrid Identity Synchronisation Project](hybrid-identity-sync/)
+
 ## PowerShell Automation
 
-Three PowerShell scripts were developed to support common IAM administration tasks.
+Three PowerShell scripts were developed to support common IAM administration activities.
 
 | Script | Purpose |
 |---|---|
-| `onboard-user.ps1` | Creates Active Directory user accounts and assigns group membership. |
+| `onboard-user.ps1` | Creates Active Directory accounts and assigns security group memberships. |
 | `offboard-user.ps1` | Disables user accounts and removes unnecessary group memberships. |
-| `access-review.ps1` | Reviews administrative group membership and potentially inactive accounts, with findings exported to CSV. |
+| `access-review.ps1` | Reviews administrative group memberships and potentially inactive accounts, exporting findings to CSV. |
 
-The scripts were used during the lab exercises to test user provisioning, offboarding and access reviews.
+The scripts were used during practical exercises to support user provisioning, offboarding and access reviews.
 
-Some limitations were identified during testing, particularly around error handling in the onboarding script. These have been documented as areas for improvement.
+Areas for further improvement include additional input validation, error handling and automation of more complex lifecycle processes.
 
 [View PowerShell Scripts](scripts/)
 
 ## Microsoft Entra ID Conditional Access
 
-Four Conditional Access policies were configured to explore different access security controls.
+Four Conditional Access policies were configured to assess different identity and access security controls.
 
 | Policy | Purpose | Status |
 |---|---|---|
-| CA001 – Block Non-Compliant Devices | Require compliant devices when accessing organisational resources. | Report-only |
-| CA002 – Require MFA – All Users | Require MFA during authentication. | On |
-| CA003 – Restrict Admin Portal – Locations | Evaluate restrictions on administrator access from outside a designated lab network. | Report-only |
+| CA001 – Block Non-Compliant Devices | Evaluate device compliance requirements when accessing organisational resources. | Report-only |
+| CA002 – Require MFA – All Users | Require multifactor authentication during sign-in. | On |
+| CA003 – Restrict Admin Portal – Locations | Evaluate location-based restrictions for administrative access. | Report-only |
 | CA004 – Require MFA – Risky Sign-ins | Require MFA for medium- and high-risk sign-ins. | On |
 
-CA002 was tested using a dedicated test account.
+### Conditional Access Testing
 
-The first test showed that the policy wasn't being applied. After reviewing the configuration, an exclusion affecting the test account was identified and removed.
+CA002 was tested using a dedicated Microsoft Entra ID account.
 
-A second test confirmed that CA002 was successfully applied in the Entra ID sign-in logs.
+During the initial test, the policy was not applied because the test account was excluded from its assignments.
 
-The other policies were configured and documented, although full enforcement testing was not completed for every scenario.
+After reviewing the configuration and correcting the exclusion, a second authentication test confirmed that CA002 was successfully applied in the Microsoft Entra sign-in logs.
+
+The remaining policies were configured and documented, although comprehensive enforcement testing was not completed across every scenario.
+
+This exercise demonstrated the importance of validating Conditional Access policies through authentication results and sign-in logs rather than relying solely on their configuration status.
 
 [View Conditional Access Configuration](conditional-access/)
 
+## Authentication and Federation
+
+Microsoft Entra ID was integrated with Auth0 using OpenID Connect to test federated application authentication.
+
+The configuration involved establishing an application registration, configuring the identity provider connection and testing authentication with a Microsoft Entra ID account.
+
+During testing, the account was prompted to register MFA before completing the authentication process.
+
+Following MFA registration, the account successfully authenticated through the federated sign-in flow.
+
+This demonstrated how Microsoft Entra ID can act as an identity provider for an external application and how MFA forms part of the authentication process.
+
+The testing confirmed successful authentication for the selected account but did not establish full enforcement or coverage across all users.
+
 ## Access Review and Least Privilege
 
-An Active Directory access review was carried out to check security group memberships and identify unnecessary access.
+An Active Directory access review was conducted to identify unnecessary group memberships and assess whether assigned access remained appropriate.
 
-During the review, the lab account `sdunce` was found to have additional memberships in `IT-Staff` and `HR-Staff`.
+The test account `sdunce` was identified as having additional memberships in the `IT-Staff` and `HR-Staff` groups.
 
 These memberships were removed, while the required `Sales-Staff` and `Domain Users` memberships were retained.
 
-A separate PowerShell access review also identified `jboom` as a member of the custom `Admin-Access` group. This was recorded for further review rather than treated as a confirmed security issue.
+A follow-up check confirmed that the unnecessary memberships had been successfully removed.
 
-The findings and changes were documented with screenshots and PowerShell output.
+A separate review also identified `jboom` as a member of the custom `Admin-Access` group. This was documented for further investigation, as the group's effective permissions had not been fully assessed.
+
+The exercise demonstrated how access reviews support least privilege and help identify permissions that may no longer be required.
 
 [View Access Review Evidence](access-review/)
 
 ## Non-Human Identity Security Review
 
-The lab also included a review of service accounts and application identities.
+The lab included a security review of Active Directory service accounts and Microsoft Entra application identities.
 
-**Active Directory**
+### Active Directory Service Accounts
 
 Two service accounts, `svc_backup` and `svc_monitoring`, were reviewed.
 
-Both accounts were disabled and had no recorded owner in the `ManagedBy` attribute. Further investigation would be needed to confirm whether the accounts were still required or had any service dependencies.
+Both accounts were disabled and had no recorded owner in the `ManagedBy` attribute.
 
-No accounts were deleted during the review.
+The accounts were not deleted because their dependencies and operational requirements had not been fully investigated.
 
-**Microsoft Entra ID**
+The review highlighted the importance of documenting account ownership, purpose and service dependencies before making changes to non-human identities.
 
-An application registration was identified without an assigned owner.
+### Microsoft Entra Application Registration
 
-The issue was addressed by assigning the lab administrator as the application owner.
+An application registration associated with the Auth0 federation configuration was reviewed.
 
-This part of the project highlighted the importance of keeping track of non-human identities, their ownership and whether they are still needed.
+The registration initially had no assigned owner. This was addressed by assigning the lab administrator as its owner.
+
+Additional considerations included reviewing application permissions and monitoring client secret expiry.
 
 [View Non-Human Identity Assessment](non-human-identity/)
 
 ## Practical IAM Exercises
 
-Five exercises were completed to apply the IAM concepts covered throughout the lab.
+Five practical exercises were completed to apply IAM concepts and investigate common identity administration and security scenarios.
 
 ### Exercise 1 – Employee Lifecycle Simulation
 
-A joiner-mover-leaver scenario was carried out using a fictional employee account.
+A joiner-mover-leaver scenario was completed using a fictional employee account.
 
-The exercise covered:
+The exercise involved:
 
-- Creating a new user in the Finance department.
+- Creating an Active Directory account in the Finance department.
 - Assigning the appropriate security group.
-- Transferring the user from Finance to Sales.
-- Updating group memberships and organisational unit placement.
+- Transferring the account from Finance to Sales.
+- Updating organisational unit placement and group memberships.
 - Disabling the account and removing access during offboarding.
 
-PowerShell scripts were used for parts of the process, with screenshots taken to verify the changes.
+PowerShell was used to support parts of the lifecycle process, with verification carried out after the changes.
 
 [View Exercise 1](exercises/exercise1/)
 
 ### Exercise 2 – Conditional Access Testing
 
-The CA002 MFA policy was tested using a Microsoft Entra ID test account.
+The CA002 MFA policy was tested using a Microsoft Entra ID account.
 
-The initial sign-in showed that CA002 wasn't applied because the account was excluded from the policy.
+An initial authentication attempt showed that the policy was not being applied due to an account exclusion.
 
-After correcting the exclusion and testing again, the sign-in logs confirmed that the policy was successfully applied.
+After correcting the configuration, the sign-in logs confirmed successful policy application.
 
-This exercise provided useful experience with troubleshooting Conditional Access and checking authentication results rather than relying only on the policy configuration.
+This exercise focused on troubleshooting Conditional Access assignments and validating authentication outcomes.
 
 [View Exercise 2](exercises/exercise2/)
 
 ### Exercise 3 – Privilege Escalation Detection
 
-A controlled scenario was used to simulate an unexpected change to an Active Directory security group.
+A controlled security scenario was used to investigate an unexpected Active Directory group membership change.
 
-The test account `dcarter` was added to the custom `Admin-Access` group.
+The test account `dcarter` was added to the custom `Admin-Access` security group.
 
-Windows Security Event Logs were then reviewed using PowerShell, where Event ID 4728 recorded the membership change.
+Windows Security Event Logs were reviewed using PowerShell, with Event ID 4728 recording the membership change.
 
-The additional membership was removed, and a final check confirmed that the group had returned to its original membership.
+The additional membership was subsequently removed and the group membership was verified.
 
-The exercise covered security event investigation, group membership auditing and access remediation.
+The exercise demonstrated security event investigation, group membership auditing and access remediation.
 
-The effective permissions of the custom group were not tested, so the scenario does not establish that Domain Admin privileges were granted.
+The effective permissions of the custom group were not tested, so the exercise does not establish that Domain Admin privileges were granted.
 
 [View Exercise 3](exercises/exercise3/)
 
 ### Exercise 4 – Orphaned Service Account Response
 
-This exercise built on the earlier non-human identity assessment.
-
-The two service accounts, `svc_backup` and `svc_monitoring`, were reviewed for account status, ownership information and potential security concerns.
+Two Active Directory service accounts were reviewed to assess their status, ownership and potential security concerns.
 
 Both accounts were disabled and had incomplete ownership information.
 
-The exercise documented the risks associated with poorly managed service accounts and the steps that should be taken before removing an account, including checking ownership, business requirements and service dependencies.
+The exercise documented the checks required before decommissioning a service account, including verifying ownership, operational dependencies and business requirements.
 
-The accounts were treated as potentially orphaned rather than confirmed orphaned, as their dependencies had not been fully investigated.
+The accounts were considered potentially orphaned rather than confirmed orphaned.
 
 [View Exercise 4](exercises/exercise4/)
 
@@ -173,69 +226,88 @@ The accounts were treated as potentially orphaned rather than confirmed orphaned
 
 A comparison was completed covering Active Directory, Microsoft Entra ID, Auth0 and Okta.
 
-The comparison focused on:
+The assessment focused on:
 
-- User and group management.
+- User and group administration.
 - Authentication and MFA.
-- SSO and federation.
+- Single sign-on and federation.
 - Access control and security policies.
 - Identity lifecycle management.
 
-Active Directory, Entra ID and Auth0 were used during practical lab activities.
+Active Directory, Microsoft Entra ID and Auth0 were used in practical lab activities.
 
-Okta was researched but not configured, as registration requirements prevented the practical setup from being completed.
+Okta was included in the research-based comparison but was not configured because of account registration requirements.
 
 [View Exercise 5](exercises/exercise5/)
 
 ## IAM Security Audit Report
 
-A security audit report was produced to bring together the findings from the Active Directory, Microsoft Entra ID and Auth0 environments.
+A security audit was conducted across the IAM lab to assess identity configurations, access controls and potential security weaknesses.
 
-The report covers areas such as:
+The assessment covered:
 
-- Password policies and authentication security.
-- MFA and Conditional Access.
-- Privileged access and group memberships.
-- Service accounts and application identities.
-- Federated authentication.
-- Security findings and recommended improvements.
+- Active Directory password and account lockout policies.
+- Microsoft Entra Conditional Access and MFA.
+- Privileged access and security group memberships.
+- Service account ownership and application registrations.
+- Federated authentication through Auth0.
+- Hybrid identity synchronisation.
+- Security findings, remediation and outstanding recommendations.
 
-The report includes observations from the lab, remediation activities and recommendations for further improvements.
+### Key Findings and Remediation
 
-[View IAM Security Audit Report (PDF)](audit-report/IAM%20Security%20Audit%20Report.pdf)
+The Active Directory password policy was reviewed and strengthened by increasing the minimum password length from 7 to 14 characters and configuring an account lockout threshold of 10 failed attempts.
+
+Unnecessary departmental group memberships were identified and removed following an access review.
+
+An application registration without an assigned owner was also identified and remediated.
+
+Other areas, including privileged access, MFA coverage across all users and service account dependencies, were documented for further investigation.
+
+The report distinguishes verified remediation from findings requiring additional assessment.
+
+[View IAM Security Audit Report](audit-report/)
 
 ## Key Learning Outcomes
 
-The project provided practical experience across several IAM areas:
+The project provided practical experience across several areas of identity and access management:
 
-- Managing Active Directory users, groups and organisational units.
-- Using PowerShell for onboarding, offboarding and access reviews.
-- Configuring and troubleshooting Microsoft Entra Conditional Access.
-- Reviewing sign-in logs and Windows Security events.
-- Testing MFA and OIDC-based authentication.
+- Administering Active Directory users, groups and organisational units.
+- Implementing hybrid identity synchronisation with Microsoft Entra Connect Sync.
+- Configuring OU filtering and Password Hash Synchronisation.
+- Troubleshooting directory synchronisation and staging mode.
+- Developing PowerShell scripts for identity lifecycle administration.
+- Configuring and troubleshooting Conditional Access policies.
+- Reviewing Microsoft Entra sign-in logs and Windows Security Events.
+- Testing MFA registration and federated authentication.
 - Investigating unexpected security group membership changes.
 - Applying least-privilege principles during access reviews.
-- Assessing service accounts and application ownership.
-- Documenting technical findings, troubleshooting and remediation.
+- Reviewing service accounts and application ownership.
+- Documenting security findings, remediation and technical evidence.
 
-One of the main takeaways from the lab was the importance of verifying changes. Whether it's removing group membership or testing an MFA policy, checking the results is just as important as making the configuration change.
+A key takeaway from the project was the importance of validating identity and access changes.
 
-## Future Improvements
+Whether configuring synchronisation, reviewing group memberships or testing authentication policies, confirming the outcome is essential to ensuring that the intended controls are operating correctly.
 
-Although the five exercises are complete, there are several areas that could be developed further:
+## Further Development
 
-- Improve error handling and validation in the PowerShell scripts.
-- Test additional Conditional Access scenarios, including device compliance and location restrictions.
-- Explore automated user provisioning and deprovisioning.
-- Implement Microsoft Entra Connect to learn more about hybrid identity synchronisation.
-- Gain hands-on experience with Okta.
-- Explore Privileged Identity Management (PIM) and identity governance features.
-- Expand service account dependency checks and access review automation.
+Potential areas for further development include:
+
+- Improving PowerShell error handling and input validation.
+- Testing additional Conditional Access scenarios involving device compliance and location restrictions.
+- Expanding automated identity provisioning and deprovisioning.
+- Testing hybrid identity lifecycle changes between Active Directory and Microsoft Entra ID.
+- Exploring Microsoft Entra Privileged Identity Management (PIM) and identity governance capabilities.
+- Developing more comprehensive service account ownership and dependency reviews.
+- Expanding access review automation and privileged access assessments.
+- Gaining practical experience with Okta.
 
 ## Project Scope
 
-This is a self-directed IAM learning project completed in a controlled lab environment.
+This is a self-directed IAM project completed within a controlled lab environment.
 
-The configurations and exercises were designed to develop practical experience with identity administration, access security and troubleshooting.
+The configurations, exercises and security assessments were designed to develop practical experience with identity administration, access security, hybrid identity management and troubleshooting.
 
-Some features were configured without full enforcement testing, and the lab does not represent a production IAM deployment.
+Although several configurations and remediation activities were successfully tested and verified, some security controls require further validation.
+
+The environment is intended for learning and portfolio demonstration purposes and does not represent a production IAM deployment.
