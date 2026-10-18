@@ -71,7 +71,7 @@ This confirmed that the enterprise application's assignment requirement was rest
 
 ### Evidence
 
-![Unassigned User Blocked](screenshots/07-unassigned-user-blocked.png)
+![Unassigned User Blocked](07-unassigned-user-blocked.png)
 
 ## 5. Successful Authentication Testing
 
